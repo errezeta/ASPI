@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,28 +7,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
+		:root {
+		  --primary: #1E1E1E; /* Nero soft per contrasto moderno */
+		  --secondary: #FF3B30; /* Rosso brillante per elementi dinamici */
+		  --background: #111922; /* Nero puro per stile dark mode */
+		  --blanc:#EFEEEE;
+		  --bianco:#FFFFFF
+		  --highlight: #0A84FF; /* Blu vibrante per accenti moderni */
+		  --text: #EAEAEA; /* Testo chiaro per leggibilità */
+		  --shadow-light: rgba(255, 255, 255, 0.1);
+		  --shadow-dark: rgba(0, 0, 0, 0.5);
+		  --placeholder: #888888;
+		  --accordion: #ffd436
+		}
+
+		*, *::before, *::after {
+		  box-sizing: border-box;
+		}
+
+		body {
+		  gap: 1rem;
+		  margin: 5% 0;
+		  padding: 2rem;
+		  color: var(--text);
+		  background: var(--background);
+		  font-family: "Inter", sans-serif;
+		}
         .tab-buttons {
-            margin-bottom: 15px;
+            margin-bottom: -12px;
             display: flex;
             gap: 5px;
         }
         .tab-button {
             padding: 10px 20px;
             cursor: pointer;
-            background-color: #e0e0e0;
-            border: 1px solid #ccc;
+            background-color: var(--accordion);
             border-radius: 5px;
+			
         }
         .tab-button.active {
-            background-color: #4CAF50;
-            color: white;
+            background-color: var(--accordion);
+            color: var(--background);
+			font-size:1rem;
+			font-weight:800;
         }
         .tab {
             display: none;
@@ -45,9 +65,10 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+			border-top: 2px solid var(--background);border-bottom: 2px solid var(--background);
         }
         th, td {
-            border: 1px solid #ddd;
+            //border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
@@ -57,9 +78,9 @@
             gap: 20px;
         }
         .signature-box {
-            border: 1px solid #ddd;
+            border-bottom: 2px solid var(--background);
             padding: 10px;
-            background: white;
+            background: var(--accordion);
         }
         .signature-pad {
             border: 1px solid #000;
@@ -172,7 +193,59 @@
       }
     }
   </style>
-	
+
+	<style>
+input[type=text], select {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 2px;
+  border-radius: 8px;
+  background: var(--blanc);
+  color: var(--background);
+  box-shadow: inset 0px 2px 5px var(--shadow-dark);
+  font-size: 16px;
+  outline: none;
+}
+
+input[type=text]:focus, select:focus {
+  background: var(--bianco);
+  color: #888888; /* Colore del testo durante il focus */
+  border-color: var(--secondary); /* Cambia il colore del bordo */
+}
+
+input[type=text]::placeholder {
+  color: var(--placeholder); /* Colore del placeholder */
+}
+
+
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, label,
+input, textarea, 
+th, td, div {
+    color: var(--background);
+}
+
+.submit {
+  width: 100%;
+  background-color: var(--secondary);
+  color: white;
+  padding: 14px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px var(--shadow-dark);
+  transition: all 0.3s;
+}
+
+.submit:hover {
+  background-color: #d32f2f;
+}
+	</style>
+
+
 </head>
 <body>
   <nav class="navbar">
@@ -190,13 +263,9 @@
       nav.classList.toggle("show");
     }
   </script>
-
-    <div class="tab-buttons">
-        <button class="tab-button active" onclick="switchTab('tab1')">Elenco Presenti</button>
-        <button class="tab-button" onclick="switchTab('tab2')">Descrizione e Note</button>
-    </div>
-
-    <!-- Selettore Lotto -->
+  
+  
+     <!-- Selettore Lotto -->
     <div style="margin-bottom: 20px;">
         <label for="lottoSelection">Seleziona Lotto: </label>
         <select id="lottoSelection">
@@ -204,39 +273,39 @@
             <option value="A11_lotto10">A11 Lotto 10</option>
         </select>
     </div>
+	
+    <div class="tab-buttons">
+        <button class="tab-button active" onclick="switchTab('tab1')">Elenco Presenti</button>
+        <button class="tab-button" onclick="switchTab('tab2')">Descrizione e Note</button>
+    </div>
+
+
 
     <!-- Tab 1 -->
-    <div id="tab1" class="tab active">
-        <h3>Tabella dei Presenti</h3>
+    <div id="tab1" class="tab active" style="width:100%;border-bottom: 1px solid #ddd;background-color:var(--accordion); padding:2%;border-radius:2%;">
+        <h3 style="color:var(--background)";>Tabella dei Presenti</h3>
         <table id="presentiTable">
-            <thead>
-                <tr>
-                    <th>Nome/Cognome</th>
-                    <th>Ruolo/Società</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr>
-                    <td><input type="text"></td>
-                    <td><input type="text"></td>
-                    <td><button onclick="deleteRow(this)">Elimina</button></td>
+                    <td><input type="text" placeholder="Nome Cognome"></td>
+                    <td><input type="text" placeholder="Ruolo / Societa'"></td>
+                    <td><button onclick="deleteRow(this)" style="background-color:#C70039;">Delete</button></td>
                 </tr>
             </tbody>
         </table>
         <button onclick="addRow()">Aggiungi Riga</button>
 
-        <div class="signature-container">
+        <div class="signature-container" >
             <div class="signature-box">
                 <p>Firma Preposto</p>
                 <canvas class="signature-pad" id="signaturePad1"></canvas>
-                <button onclick="clearSignature(1)">Cancella Firma</button>
+				<p><button onclick="clearSignature(1)" style="width:100%;background-color:#C70039">Cancella Firma</button><p>
             </div>
         </div>
     </div>
 
     <!-- Tab 2 -->
-    <div id="tab2" class="tab">
+    <div id="tab2" class="tab" style="width:100%;border-bottom: 1px solid #ddd;background-color:var(--accordion); padding:2%;border-radius:2%;">
         <h3>Descrizione e Note</h3>
         <textarea id="descrizioneNote" rows="5" style="width:100%"></textarea>
 
@@ -248,17 +317,18 @@
             <div class="signature-box">
                 <p>Firma Compilatore</p>
                 <canvas class="signature-pad" id="signaturePad2"></canvas>
-                <button onclick="clearSignature(2)">Cancella Firma</button>
+                <p><button onclick="clearSignature(2)" style="width:100%;background-color:#C70039">Cancella Firma</button></p>
             </div>
             <div class="signature-box">
                 <p>Firma Ditta</p>
                 <canvas class="signature-pad" id="signaturePad3"></canvas>
-                <button onclick="clearSignature(3)">Cancella Firma</button>
+                <p><button onclick="clearSignature(3)" style="width:100%;background-color:#C70039">Cancella Firma</button></p>
             </div>
         </div>
-
-        <button onclick="generatePDF()">Salva PDF</button>
+		<div><br></div>
+        <button onclick="generatePDF()"style="width:100%;padding:10px" class="submit">Salva PDF</button>
     </div>
+
 
     <script>
         const { jsPDF } = window.jspdf;
@@ -361,9 +431,9 @@
             const table = document.querySelector('#presentiTable tbody');
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-                <td><button onclick="deleteRow(this)">Elimina</button></td>
+                <td><input type="text" placeholder="Nome Cognome'"></td>
+                <td><input type="text" placeholder="Ruolo / Societa"></td>
+                <td><button onclick="deleteRow(this)" style="background-color:#C70039;">Delete</button></td>
             `;
             table.appendChild(newRow);
         }
