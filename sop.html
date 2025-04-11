@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulo di Verifica</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .tab-buttons {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 5px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .tab-button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tab {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tab.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .signature-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .signature-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+        }
+        .signature-pad {
+            border: 1px solid #000;
+            background: white;
+            width: 300px;
+            height: 150px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #photoPreview img {
+            width: 100px;
+            height: 75px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+    </style>
+	
+	
+<style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #0f1722;
+      color: white;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      background-color: #0f1722;
+      color: white;
+      font-weight: bold;
+      padding: 10px 15px;
+      font-size: 20px;
+    }
+
+    .menu-toggle {
+      font-size: 28px;
+      cursor: pointer;
+      display: none;
+      color: white;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .right-link {
+      font-weight: bold;
+      color: white;
+    }
+
+    /* Mobile Style */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #0f1722;
+        padding: 20px;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .nav-links li {
+        margin-bottom: 15px;
+      }
+
+      .nav-links li a {
+        font-size: 24px;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: white;
+      }
+
+      .nav-links li a::after {
+        content: " /";
+        margin-left: 5px;
+      }
+
+      .right-link {
+        display: none;
+      }
+    }
+  </style>
+	
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">IBS Progetti</div>
+    <div class="menu-toggle" onclick="toggleMenu()">&#47;&#47;</div> <!-- "//" icon -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">CHECK LIST</a></li>
+      <li><a href="sop.html">SOPRALLUOGO</a></li>
+    </ul>
+    <div class="right-link">INDUSTRY HUB</div>
+  </nav>
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById("navLinks");
+      nav.classList.toggle("show");
+    }
+  </script>
+
+    <div class="tab-buttons">
+        <button class="tab-button active" onclick="switchTab('tab1')">Elenco Presenti</button>
+        <button class="tab-button" onclick="switchTab('tab2')">Descrizione e Note</button>
+    </div>
+
+    <!-- Selettore Lotto -->
+    <div style="margin-bottom: 20px;">
+        <label for="lottoSelection">Seleziona Lotto: </label>
+        <select id="lottoSelection">
+            <option value="A1_lotto12">A1 Lotto 12</option>
+            <option value="A11_lotto10">A11 Lotto 10</option>
+        </select>
+    </div>
+
+    <!-- Tab 1 -->
+    <div id="tab1" class="tab active">
+        <h3>Tabella dei Presenti</h3>
+        <table id="presentiTable">
+            <thead>
+                <tr>
+                    <th>Nome/Cognome</th>
+                    <th>Ruolo/Società</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                    <td><button onclick="deleteRow(this)">Elimina</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="addRow()">Aggiungi Riga</button>
+
+        <div class="signature-container">
+            <div class="signature-box">
+                <p>Firma Preposto</p>
+                <canvas class="signature-pad" id="signaturePad1"></canvas>
+                <button onclick="clearSignature(1)">Cancella Firma</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2 -->
+    <div id="tab2" class="tab">
+        <h3>Descrizione e Note</h3>
+        <textarea id="descrizioneNote" rows="5" style="width:100%"></textarea>
+
+        <h3>Foto</h3>
+        <input type="file" id="photoInput" accept="image/*" multiple>
+        <div id="photoPreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></div>
+
+        <div class="signature-container">
+            <div class="signature-box">
+                <p>Firma Compilatore</p>
+                <canvas class="signature-pad" id="signaturePad2"></canvas>
+                <button onclick="clearSignature(2)">Cancella Firma</button>
+            </div>
+            <div class="signature-box">
+                <p>Firma Ditta</p>
+                <canvas class="signature-pad" id="signaturePad3"></canvas>
+                <button onclick="clearSignature(3)">Cancella Firma</button>
+            </div>
+        </div>
+
+        <button onclick="generatePDF()">Salva PDF</button>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        let signatures = {};
+        let uploadedImages = [];
+
+        function initSignaturePads() {
+            [1, 2, 3].forEach(num => {
+                const canvas = document.getElementById(`signaturePad${num}`);
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = 300;
+                canvas.height = 150;
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                let drawing = false;
+
+                function getCoords(event) {
+                    const rect = canvas.getBoundingClientRect();
+                    return {
+                        x: (event.touches ? event.touches[0].clientX : event.clientX) - rect.left,
+                        y: (event.touches ? event.touches[0].clientY : event.clientY) - rect.top
+                    };
+                }
+
+                function startDrawing(event) {
+                    event.preventDefault();
+                    drawing = true;
+                    const { x, y } = getCoords(event);
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                }
+
+                function draw(event) {
+                    if (!drawing) return;
+                    event.preventDefault();
+                    const { x, y } = getCoords(event);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    signatures[num].dataUrl = canvas.toDataURL();
+                }
+
+                function stopDrawing() {
+                    drawing = false;
+                }
+
+                // Mouse events
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mouseleave', stopDrawing);
+
+                // Touch events
+                canvas.addEventListener('touchstart', startDrawing);
+                canvas.addEventListener('touchmove', draw);
+                canvas.addEventListener('touchend', stopDrawing);
+
+                signatures[num] = { canvas, ctx, dataUrl: null };
+            });
+        }
+
+        function clearSignature(num) {
+            const { canvas, ctx } = signatures[num];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            signatures[num].dataUrl = null;
+        }
+
+        document.getElementById("photoInput").addEventListener("change", function(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById("photoPreview");
+            previewContainer.innerHTML = "";
+            uploadedImages = [];
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push(e.target.result);
+
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.width = "100px";
+                    img.style.height = "75px";
+                    img.style.objectFit = "cover";
+                    img.style.border = "1px solid #ccc";
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function addRow() {
+            const table = document.querySelector('#presentiTable tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td><button onclick="deleteRow(this)">Elimina</button></td>
+            `;
+            table.appendChild(newRow);
+        }
+
+        function deleteRow(btn) {
+            btn.closest('tr').remove();
+        }
+
+        function wrapText(text, maxLength) {
+            const words = text.split(' ');
+            let currentLine = '';
+            const lines = [];
+            
+            words.forEach(word => {
+                if ((currentLine + word).length <= maxLength) {
+                    currentLine += word + ' ';
+                } else {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                }
+            });
+            if (currentLine) lines.push(currentLine.trim());
+            return lines.join('\n');
+        }
+
+        function generatePDF() {
+            const doc = new jsPDF();
+            const lottoSelection = document.getElementById('lottoSelection').value;
+
+            // Intestazione
+            doc.setFontSize(10);
+            
+            if (lottoSelection === "A1_lotto12") {
+                doc.text("Contratto:", 10, 10);
+                doc.text("LOTTO 12: Accordo Quadro n. 81029814 Tender_67587. Accordo Quadro per il servizio di Manutenzione ordinaria e ricorrente con quota parte lavori lungo le tratte autostradali di competenza della Direzione 4° tronco.", 10, 15, { maxWidth: 190 });
+                doc.text("Committente:", 10, 25);
+                doc.text("Autostrade per l’Italia S.p.A. (C.F./P.IVA 07516911000), società soggetta all’attività di direzione e coordinamento da parte di Holding Reti Autostradali S.p.A.", 10, 30, { maxWidth: 190 });
+                doc.text("RL: Ing. Giuseppe D’Elia – Autostrade per l’Italia Spa - Via di Limite SNC - 50013 Campi Bisenzio (FI) - Tel. 055 42031", 10, 40, { maxWidth: 190 });
+                doc.text("DL & CSE: Ing. Luca Bari (CF: BRALCU64B10C608H) – Via Andrea del Sarto 24 – 50135 Firenze (FI) – mail: luca.bari.ing@gmail.com - cell: +39 327 5799155.", 10, 50, { maxWidth: 190 });
+            } else if (lottoSelection === "A11_lotto10") {
+                doc.text("Contratto:", 10, 10);
+                doc.text("LOTTO 10: Accordo Quadro per il servizio di Manutenzione ordinaria e ricorrente con quota parte lavori lungo le tratte autostradali di competenza della Direzione di Tronco di Firenze.", 10, 15, { maxWidth: 190 });
+                doc.text("Committente:", 10, 25);
+                doc.text("Autostrade per l’Italia S.p.A. (C.F./P.IVA 07516911000), società soggetta all’attività di direzione e coordinamento da parte di Holding Reti Autostradali S.p.A., Direzione di Tronco di Firenze con sede in Via Limite - 50013 Campi Bisenzio (FI)", 10, 30, { maxWidth: 190 });
+                doc.text("RL: Ing. Giuseppe D’Elia – Autostrade per l’Italia Spa - Via di Limite SNC - 50013 Campi Bisenzio (FI) - Tel. 055 42031", 10, 40, { maxWidth: 190 });
+                doc.text("DL: Ing. Luca Bari (CF: BRALCU64B10C608H) – Via Andrea del Sarto 24 – 50135 Firenze (FI) – mail: luca.bari.ing@gmail.com - cell: +39 327 5799155", 10, 50, { maxWidth: 190 });
+                doc.text("CSE: Ing. Luca Bari (CF: BRALCU64B10C608H) – Via Andrea del Sarto 24 – 50135 Firenze (FI) – mail: luca.bari.ing@gmail.com - cell: +39 327 5799155", 10, 60, { maxWidth: 190 });
+            }
+
+            // Data e ora
+            const date = new Date();
+            doc.text(`Data e Ora: ${date.toLocaleString()}`, 10, 70);
+
+            // Elenco dei Presenti
+            doc.text("Elenco Presenti", 10, 80);
+            let tableData = Array.from(document.querySelectorAll('#presentiTable tbody tr'))
+                .map(row => [...row.querySelectorAll('input')].map(input => input.value));
+            doc.autoTable({ head: [['Nome', 'Ruolo']], body: tableData, startY: 85 });
+
+            // Descrizione e Note
+            doc.text("Descrizione e Note", 10, doc.autoTable.previous.finalY + 10);
+            doc.text(wrapText(document.getElementById('descrizioneNote').value, 98), 10, doc.autoTable.previous.finalY + 15);
+
+            // Foto
+            let startY = doc.autoTable.previous.finalY + 30;
+            let x = 10;
+            let imageCount = 0;
+
+            if(uploadedImages.length > 0) {
+                doc.text("Foto Documentazione:", 10, startY - 10);
+                uploadedImages.forEach(imageData => {
+                    doc.addImage(imageData, "JPEG", x, startY, 40, 30);
+                    x += 45;
+                    imageCount++;
+
+                    if (imageCount % 3 === 0) {
+                        x = 10;
+                        startY += 35;
+                    }
+                });
+                startY += 35;
+            }
+
+            // Firma Preposto
+            doc.text("Firma Preposto", 10, startY + 10);
+            doc.addImage(signatures[1].dataUrl, 'PNG', 10, startY + 15, 50, 25);
+
+            // Firma Compilatore
+            doc.text("Firma Compilatore", 10, startY + 45);
+            doc.addImage(signatures[2].dataUrl, 'PNG', 10, startY + 50, 50, 25);
+
+            // Firma Ditta
+            doc.text("Firma Ditta", 10, startY + 80);
+            doc.addImage(signatures[3].dataUrl, 'PNG', 10, startY + 85, 50, 25);
+
+            doc.save("Verbale.pdf");
+        }
+
+        window.onload = initSignaturePads;
+    </script>
+</body>
+</html>
