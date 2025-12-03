@@ -900,6 +900,7 @@ if (files.length > 0) {
   const pagePadding = 10    // Padding superiore specificato a 35
   const imagesPerRow = 3;
   const maxRowHeight = 80; // Maximum height for a row of images
+  const bottomMargin = 30
   let currentX = pagePadding;
   let currentY = 35;
   let rowHeight = 0;
@@ -962,7 +963,7 @@ if (files.length > 0) {
   for (const row of rows) {
     // Check if we need a new page
     const rowMaxHeight = Math.max(...row.map(img => img.height));
-    if (currentY + rowMaxHeight > doc.internal.pageSize.height - pagePadding) {
+    if (currentY + rowMaxHeight > doc.internal.pageSize.height - bottomMargin) {
       doc.addPage();
       currentY = 35;
     }
