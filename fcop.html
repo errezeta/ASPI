@@ -772,7 +772,7 @@ console.log(csvText);
     "dl": "Ing. Fabrizio Braconi",
     "cse": "Ing. Fabrizio Braconi",
     "tipologia": "Lavori di manutenzione straordinaria e realizzazione data center",
-    "titolo_abilitativo": "Prot. CIL:CU2025/99949",
+    "titolo_abilitativo": "Prot. CIL :CU2025/99949",
     "impresa_appaltatrice": "Installazioni Impianti S.P.A."
   }
 }
@@ -927,7 +927,7 @@ document.getElementById("download-pdf").addEventListener("click", async function
 	y = printRow("Lavori:", data.tipologia, doc, y);
 	y = printRow("Titolo Autorizzativo:", data.titolo_abilitativo, doc, y);
 	y = printRow("Impresa Appaltatrice:", data.impresa_appaltatrice, doc, y);
-	y = printRow("Impresa Subappaltatrice:", document.getElementById('subappalto')?.value, doc, y);
+	y = printRow("Impresa Subappaltatrice", document.getElementById('subappalto')?.value, doc, y);
 
 	y += 5; // piccolo margine prima del blocco inferiore
 
@@ -1106,7 +1106,7 @@ for (let i = 1; i <= totalPages; i++) {
   doc.addImage(imgData2, 'PNG', 15, 2, 181, 0);
   doc.addImage(imgData,  'PNG', (pageWidth -50)/ 2, 22, logo_cliente, 0);
   doc.setFontSize(10);
-  centerText(`Verbale di Sopralluogo del ${date}`, 35);
+  centerText("Verbale di Sopralluogo del "+ document.getElementById('datepicker')?.value, 35);
   
   
 
