@@ -357,6 +357,7 @@ src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAy4AAACwCAYAAADpNzoFAAAgAElEQ
 
     <!-- LOTTI -->
     <option value="Oriolo">Oriolo Romano</option>
+	<option value="Pietralata">Pietralata Via Feronia</option>
 </select>
 
 <div >
@@ -773,7 +774,19 @@ console.log(csvText);
     "cse": "Ing. Fabrizio Braconi",
     "tipologia": "Lavori di manutenzione straordinaria e realizzazione data center",
     "titolo_abilitativo": "Prot. CIL :CU2025/99949",
+    "impresa_appaltatrice": "Installazioni Impianti S.P.A.",
+	"redattore":"Ing. Diego Rizzardini"
+  },
+  "Pietralata": {
+    "nome_sito": "Pietralata Via Feronia 96",
+    "indirizzo": "Via Feronia 96, Roma",
+    "comune": "Roma (RM)",
+    "dl": "Ing. Fabrizio Braconi",
+    "cse": "Ing. Fabrizio Braconi",
+    "tipologia": "Lavori di manutenzione straordinaria delle facciate",
+    "titolo_abilitativo": "NON C'è ANCORA",
     "impresa_appaltatrice": "Installazioni Impianti S.P.A."
+	"redattore":"Ing. Alessandro Ascione"
   }
 }
 
@@ -920,6 +933,7 @@ document.getElementById("download-pdf").addEventListener("click", async function
     let startY = 20;
 	let y = 45
 	y = printRow("Sopralluogo del:", document.getElementById('datepicker')?.value + " Ore: " + document.getElementById('timepicker')?.value, doc, y); // diocane
+	y = printRow("Redatto da:", data.redattore, doc, y);
 	y = printRow("Sigla e Nome Sito:", data.nome_sito, doc, y);
 	y = printRow("Indirizzo:", data.indirizzo, doc, y);
 	y = printRow("Comune:", data.comune, doc, y);
