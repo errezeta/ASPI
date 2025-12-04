@@ -108,7 +108,24 @@ body {
   border-bottom: 2px solid var(--background);
 
 }
+input[type=number], select {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 2px;
+  border-radius: 8px;
+  background: var(--blanc);
+  color: var(--background);
+  box-shadow: inset 0px 2px 5px var(--shadow-dark);
+  font-size: 16px;
+  outline: none;
+}
 
+input[type=number]:focus, select:focus {
+  background: var(--bianco);
+  color: #888888; /* Colore del testo durante il focus */
+  border-color: var(--secondary); /* Cambia il colore del bordo */
+}
 input[type=text], select {
   width: 100%;
   padding: 14px;
@@ -365,9 +382,11 @@ src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAy4AAACwCAYAAADpNzoFAAAgAElEQ
 
 <div >
 <p>
-  Date:
-  <input type="text" id="datepicker" placeholder="Seleziona data">
-  <input type="text" id="timepicker" placeholder="Ora">
+  Data e Ora:
+  <div style="display: flex; gap: 10px; align-items: center;">
+  <input type="text" id="datepicker" placeholder="Seleziona data" style="width: 50%!important";>
+  <input type="number" id="timepicker" placeholder="Ora" style="width: 50%!important";>
+  </div>
 </p>
 <p style= "color:var(--background);">Impresa Subappaltatrice <input type="text" id="subappalto" placeholder="Nome Impresa"></p>
 <p style= "color:var(--background);">Presenti in Sopralluogo: <input type="text" id="personale" placeholder="Nome e Cognome - Impresa"></p>
