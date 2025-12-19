@@ -1138,7 +1138,7 @@ for (let i = 1; i <= totalPages; i++) {
   doc.setPage(i);
 
   // --- HEADER ---
-  doc.addImage(imgData2, 'PNG', 15, 2, 181, 0);
+  doc.addImage(imgData2, 'PNG', 15, 2, 50, 0);
   doc.addImage(imgData,  'PNG', (pageWidth -50)/ 2, 22, logo_cliente, 0);
   doc.setFontSize(10);
   centerText("Verbale di Sopralluogo del "+ document.getElementById('datepicker')?.value, 35);
